@@ -40,7 +40,12 @@ const AudioRecorder: React.FC = () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
-        let options = { mimeType: "audio/webm", bitsPerSecond: 32000 }; // Example for 128 kbps
+
+        let options = {};
+        const preferredMimeType = "audio/webm";
+        if (MediaRecorder.isTypeSupported(preferredMimeType)) {
+          options = { mimeType: preferredMimeType, bitsPerSecond: 32000 };
+        } // else, options will remain an empty object, and the MediaRecorder will use the default mimeType
 
         const recorder = new MediaRecorder(stream, options);
         setMediaRecorder(recorder);
